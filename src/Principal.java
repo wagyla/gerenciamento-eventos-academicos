@@ -1,6 +1,7 @@
 import Classes.*;
 import DAO.Conexao;
 import ENUM.PapelUsuario;
+import Exceptions.SenhaIncorretaException;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -14,10 +15,14 @@ public class Principal {
     public static void main(String[] args) {
          Conexao conexao = new Conexao();
          conexao.initBD();
-         menu();
+        try {
+            menu();
+        } catch (SenhaIncorretaException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static void menu(){
+    public static void menu() throws SenhaIncorretaException {
         int op = 0;
         do {
             Scanner scan = new Scanner(System.in);
@@ -80,7 +85,7 @@ public class Principal {
         System.out.println("Cadastrado com sucesso!!!!!");
     }
 
-    public static void login() {
+    public static void login() throws SenhaIncorretaException {
         Scanner scan = new Scanner(System.in);
         System.out.println("Digite o email:");
         String email = scan.nextLine();

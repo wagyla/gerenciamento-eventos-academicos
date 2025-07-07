@@ -1,5 +1,6 @@
 package Classes;
 import ENUM.PapelUsuario;
+import Exceptions.SenhaIncorretaException;
 
 public class Participante extends Usuario {
 
@@ -19,14 +20,17 @@ public class Participante extends Usuario {
     }
 
 
-    public static Usuario login(String email, String senha){
+    public static Usuario login(String email, String senha) throws SenhaIncorretaException{
         Participante pt = UsuarioDB.selecionarParticipantePorEmail(email);
-
+        
+        if (pt == null){
+            throw new SenhaIncorretaException("Usuário não encontrado para o email "+email);
+        }
         if(pt.comparePassword(senha)){
             return pt;
         }else{
 //           Exceção de Senha incorreta
-            return null;
+            throw new SenhaIncorretaException("Senha incorreta para o email: " +email);
         }
     }
 
@@ -36,7 +40,7 @@ public class Participante extends Usuario {
 
     @Override
     public void visualizarEventos() {
-        System.out.println("VSUALIZAR EVENTOS");
+        System.out.println("VISUALIZAR EVENTOS");
 
     }
 }
