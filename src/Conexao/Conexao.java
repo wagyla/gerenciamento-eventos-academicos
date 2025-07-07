@@ -1,21 +1,18 @@
-package DAO;
+package Conexao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Conexao {
     private Connection connection;
 
     public void conectar(){
-        System.out.println("Abrindo conexão com o banco de dados");
         try {
             Class.forName("org.sqlite.JDBC");
-            System.out.println("CHEGOU AQUI");
             connection = DriverManager.getConnection("jdbc:sqlite:usuarios.db");
-            System.out.println("Conexão Estabelecida.");
         } catch (Exception e) {
-            System.out.println("Erro ao conectar no banco de dados");
             System.out.println(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
@@ -24,7 +21,13 @@ public class Conexao {
     public void initBD() {
         this.conectar();
         try {
-            System.out.println("Iniciando Banco de Dados");
+            String resetDataBase = """
+                    select 'drop table if exists "' || name || '";' as comando
+                    from sqlite_master
+                    where type = 'table' and name not like 'sqlite_%';
+                    """;
+
+
             String createUsuarios = "CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT,nome TEXT,email TEXT, senha TEXT, papel TEXT)";
             String createEventos = """
             CREATE TABLE if not exists eventos (
@@ -42,7 +45,7 @@ public class Conexao {
                 descricao text,
                 nome text,
                 data text,
-                limite_incricao integer,
+                limite_inscricao integer,
                 tipo_atividade text,
             
                 foreign key (evento_id) references eventos(id)
@@ -60,23 +63,36 @@ public class Conexao {
             String createInscritos_eventos = """
             CREATE TABLE IF NOT EXISTS inscritos_evento(
                 id_usuario integer not null,
-                id_atividade integer,
+                id_evento integer,
                 status_pagamento text,
             
-                primary key (id_usuario, id_atividade),
-                foreign key (id_usuario) references usuarios(id)
+                primary key (id_usuario, id_evento),
+                foreign key (id_usuario) references usuarios(id),
+                foreign key (id_evento) references eventos(id)
             );
                     """;
+
             Statement stm = connection.createStatement();
+            ResultSet resultado = stm.executeQuery(resetDataBase);
+
+            while (resultado.next()){
+                stm.executeUpdate(resultado.getString("comando"));
+            }
             stm.execute(createUsuarios);
             stm.execute(createEventos);
             stm.execute(createAtividades);
             stm.execute(createInscritos_atividade);
             stm.execute(createInscritos_eventos);
-            System.out.println("Inicializado com sucesso!");
+
+            String seederUsuario = """
+                    insert into usuarios(nome, email, senha, papel) values
+                    ("leticia", "let@email.com", "123", "ADMINISTRADOR");
+                    """;
+
+            stm.executeUpdate(seederUsuario);
         }catch (Exception e){
-            System.out.println("Falha ao iniciar  banco de dados");
             System.out.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }finally {
             this.fechar();
         }

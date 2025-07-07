@@ -1,6 +1,6 @@
 package Classes;
 
-import DAO.Conexao;
+import Conexao.Conexao;
 import ENUM.PapelUsuario;
 import ENUM.StatusPagamento;
 
@@ -224,6 +224,40 @@ public class TarefasAdminDB {
             PreparedStatement st = cx.getConnection().prepareStatement(query);
             st.setInt(1, idEvento);
             st.setString(2, StatusPagamento.AGUARDANDO_CONFIRMACAO.name());
+
+            ResultSet resultado = st.executeQuery();
+
+            while (resultado.next()){
+                int id = resultado.getInt("id");
+                String nome = resultado.getString("nome");
+                String email = resultado.getString("email");
+                String senha = resultado.getString("senha");
+                String papel = resultado.getString("papel");
+
+                participantes.add(new Participante(id, email, nome, senha, PapelUsuario.valueOf(papel)));
+            }
+        }catch (Exception err){
+            System.out.println(err.getMessage());
+        }finally {
+            cx.fechar();
+        }
+
+        return participantes;
+    }
+
+    public static List<Participante> ListarParticipantes(int idEvento){
+        Conexao cx = new Conexao();
+        cx.conectar();
+        List<Participante> participantes = new ArrayList();
+        try{
+            String QueryJoin = """
+                    select u.* from usuarios u
+                    inner join inscritos_evento ie
+                    on ie.id_usuario = u.id
+                    where ie.id_evento = ?;
+                    """;
+            PreparedStatement st = cx.getConnection().prepareStatement(QueryJoin);
+            st.setInt(1, idEvento);
 
             ResultSet resultado = st.executeQuery();
 
