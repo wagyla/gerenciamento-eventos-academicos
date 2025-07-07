@@ -4,11 +4,12 @@ import Classes.Participante;
 import Classes.TarefasParticipanteDB;
 import ENUM.PapelUsuario;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuParticipante {
-    public static void areaParticipante(Participante p){
+    public static void areaParticipante(Participante p) throws SQLException, ClassNotFoundException {
         int op = 0;
         do {
             Scanner scan = new Scanner(System.in);
@@ -51,7 +52,7 @@ public class MenuParticipante {
         } while(op != 0);
     }
 
-    public static void eventosInscritos(Participante p){
+    public static void eventosInscritos(Participante p) throws SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasParticipanteDB.ListarEventosParticipando(p.getId());
         System.out.println("Eventos inscritos:");
@@ -61,7 +62,7 @@ public class MenuParticipante {
         }
     }
 
-    public static  void atvidadesInscritas(Participante p){
+    public static  void atvidadesInscritas(Participante p) throws SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasParticipanteDB.ListarEventosParticipando(p.getId());
         System.out.println("Selecione um evento:");
@@ -80,7 +81,7 @@ public class MenuParticipante {
 
     }
 
-    public static void InscricaoEvento(Participante p){
+    public static void InscricaoEvento(Participante p) throws SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasParticipanteDB.ListarEventosNaoParticipando(p.getId());
         System.out.println("Escolha o evento:");
@@ -95,7 +96,7 @@ public class MenuParticipante {
         System.out.println("Inscrito com sucesso!");
     }
 
-    public static void InscricaoAtividade(Participante p){
+    public static void InscricaoAtividade(Participante p) throws SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasParticipanteDB.ListarEventosParticipando(p.getId());
         System.out.println("Escolha o evento:");
@@ -119,7 +120,7 @@ public class MenuParticipante {
         TarefasParticipanteDB.inscricaoAtividades(p.getId(), atividadeID);
     }
 
-    public static void efetuarPagamento(Participante p){
+    public static void efetuarPagamento(Participante p) throws SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasParticipanteDB.ListarEventosPagPendente(p.getId());
         System.out.println("Escolha o evento:");
@@ -156,7 +157,7 @@ public class MenuParticipante {
         }
     }
 
-    public static void cancelarInscricao(Participante p){
+    public static void cancelarInscricao(Participante p) throws SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasParticipanteDB.ListarEventosParticipando(p.getId());
         System.out.println("Escolha o evento que deseja cancelar:");

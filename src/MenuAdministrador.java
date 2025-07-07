@@ -2,14 +2,16 @@ import Classes.Evento;
 import Classes.Participante;
 import Classes.TarefasAdminDB;
 import ENUM.PapelUsuario;
+import Exceptions.InformacoesInvalidasException;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuAdministrador {
-    public static void menuAdmin(){
+    public static void menuAdmin() throws SQLException, ClassNotFoundException, InformacoesInvalidasException {
         int op = 0;
         do {
             Scanner scan = new Scanner(System.in);
@@ -66,7 +68,7 @@ public class MenuAdministrador {
         System.out.println("Evento Criado com sucesso.");
     }
 
-    public static void cadastrarAtividade() {
+    public static void cadastrarAtividade() throws SQLException, ClassNotFoundException, InformacoesInvalidasException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasAdminDB.ListarEventos();
         System.out.println("Selecione um evento:");
@@ -93,7 +95,7 @@ public class MenuAdministrador {
 
     }
 
-    public static void  confirmarStatusPag(){
+    public static void  confirmarStatusPag() throws SQLException, ClassNotFoundException, InformacoesInvalidasException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasAdminDB.ListarEventos();
         System.out.println("Selecione um evento:");
@@ -106,7 +108,7 @@ public class MenuAdministrador {
 
         List<Participante> pPendentes = TarefasAdminDB.ListarParticipantesAguardandoConfirmacao(eventoId);
 
-        System.out.println("Selecione um arrombado:");
+        System.out.println("Selecione um Participante:");
 
         for(Participante part :pPendentes){
             System.out.println(String.format("%s - %s", part.getId(), part.getNome()));
@@ -121,7 +123,7 @@ public class MenuAdministrador {
 
     }
 
-    public static void menuEditarEvento(){
+    public static void menuEditarEvento() throws SQLException, ClassNotFoundException, InformacoesInvalidasException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasAdminDB.ListarEventos();
         System.out.println("Selecione um evento:");
@@ -146,7 +148,7 @@ public class MenuAdministrador {
 
     }
 
-    public static void excluirEvento(){
+    public static void excluirEvento() throws SQLException, ClassNotFoundException, InformacoesInvalidasException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasAdminDB.ListarEventos();
         System.out.println("Selecione um evento:");
@@ -161,7 +163,7 @@ public class MenuAdministrador {
         System.out.println("Evento excluído com sucesso!");
     }
 
-    public static void painelAdministrativo(){
+    public static void painelAdministrativo() throws SQLException, ClassNotFoundException {
         int op = 0;
         do {
             Scanner scan = new Scanner(System.in);
@@ -197,7 +199,7 @@ public class MenuAdministrador {
         } while(op != 0);
     }
 
-    public static  void ListarEventos(){
+    public static  void ListarEventos() throws SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasAdminDB.ListarEventos();
         System.out.println("Eventos:");
@@ -207,7 +209,7 @@ public class MenuAdministrador {
         }
     }
 
-    public static void ConsultarParticipantes(){
+    public static void ConsultarParticipantes() throws SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasAdminDB.ListarEventos();
         System.out.println("Selecione um evento:");
@@ -224,7 +226,7 @@ public class MenuAdministrador {
         }
     }
 
-    public static void VizualizaStatusPagamento(){
+    public static void VizualizaStatusPagamento() throws SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasAdminDB.ListarEventos();
         System.out.println("Selecione um evento:");
