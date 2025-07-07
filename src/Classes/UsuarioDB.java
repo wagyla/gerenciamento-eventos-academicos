@@ -1,6 +1,6 @@
 package Classes;
 
-import DAO.Conexao;
+import Conexao.Conexao;
 import ENUM.PapelUsuario;
 
 import java.sql.PreparedStatement;
@@ -95,5 +95,6 @@ public class UsuarioDB {
         }
         return adm;
     }
+
 
 }

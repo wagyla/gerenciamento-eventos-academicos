@@ -1,6 +1,6 @@
 package Classes;
 
-import DAO.Conexao;
+import Conexao.Conexao;
 import ENUM.StatusPagamento;
 import Exceptions.ConexaoBancoException;
 
@@ -261,4 +261,46 @@ public class TarefasParticipanteDB {
         return eventos;
     }
 
+    public static StatusPagamento coletarStatusPagamento(int idParticipante, int idEvento){
+        Conexao cx = new Conexao();
+        cx.conectar();
+        StatusPagamento st = null;
+        try{
+            String query = "select status_pagamento from inscritos_evento where id_usuario = ? and id_evento = ?;";
+            PreparedStatement ps = cx.getConnection().prepareStatement(query);
+            ps.setInt(1, idParticipante);
+            ps.setInt(2, idEvento);
+
+            ResultSet resultado = ps.executeQuery();
+            if(resultado.next()){
+                st =  StatusPagamento.valueOf(resultado.getString("status_pagamento"));
+            }
+        } catch (Exception e) {
+//            Erro ao coletar status, provavelmente usuario nao inscrito no evento
+            System.out.println(e.getMessage());
+        }finally {
+            cx.fechar();
+        }
+
+        return st;
+    }
+
+    public static void cancelarInscricao(int idParticipante, int idEvento){
+        Conexao cx = new Conexao();
+        cx.conectar();
+        try{
+            String query = "delete from inscritos_evento where id_usuario = ? and id_evento = ?;";
+            PreparedStatement ps = cx.getConnection().prepareStatement(query);
+            ps.setInt(1, idParticipante);
+            ps.setInt(2, idEvento);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }finally{
+            cx.fechar();
+        }
+
+    }
 }

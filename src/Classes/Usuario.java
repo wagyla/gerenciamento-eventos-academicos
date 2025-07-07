@@ -51,12 +51,6 @@ public abstract class Usuario {
         return password.equals(this.senha);
     }
 
-    public static Usuario login(String email, String senha) throws SenhaIncorretaException {
-        return null;
-    }
-
-    public abstract void visualizarEventos();
-
     @Override
     public String toString() {
         return "Usuario{" +

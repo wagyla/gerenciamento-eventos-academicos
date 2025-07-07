@@ -2,7 +2,7 @@ package Classes;
 
 import ENUM.PapelUsuario;
 
-public class Administrador extends Usuario {
+public class Administrador extends Usuario implements UsuarioInterface {
 
     public Administrador (String nome,String email,String senha, PapelUsuario papel){
         super(nome,email,senha, papel);
@@ -21,13 +21,5 @@ public class Administrador extends Usuario {
 //           Exceção de Senha incorreta
             return null;
         }
-    }
-
-
-
-
-    @Override
-    public void visualizarEventos() {
-        System.out.println("listar os eventos");
     }
 }
