@@ -103,7 +103,5 @@ public class MenuController {
         System.out.println(a.getNome());
 
         MenuAdministrador.menuAdmin();
-
     }
-
 }

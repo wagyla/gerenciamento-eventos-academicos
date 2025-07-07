@@ -12,14 +12,6 @@ public class Principal {
             throw new RuntimeException(e);
         }
     }
-
-
-
-
-
-
-
-
 }
 
 
