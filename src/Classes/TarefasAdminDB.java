@@ -3,6 +3,7 @@ package Classes;
 import DAO.Conexao;
 import ENUM.PapelUsuario;
 import ENUM.StatusPagamento;
+import Exceptions.InformacoesInvalidasException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,12 +15,10 @@ import java.util.List;
 
 public class TarefasAdminDB {
 
-    public static void criarEvento(String nome, String descricao, LocalDate data_inicio,LocalDate data_fim){
+    public static void criarEvento(String nome, String descricao, LocalDate data_inicio,LocalDate data_fim) throws InformacoesInvalidasException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
-
-
             String criarEvento = """
                 insert into eventos(nome, descricao, data_inicio, data_fim) values
                 (?, ?, ?, ?)
@@ -33,8 +32,7 @@ public class TarefasAdminDB {
 
             st.executeUpdate();
         }catch(Exception e){
-            System.out.println(e.getMessage());
-
+            throw new InformacoesInvalidasException("Informações Inválidas! Erro: "+e.getMessage());
 //            Informações invalidas!
 
         }finally {
@@ -44,7 +42,7 @@ public class TarefasAdminDB {
     }
 
 
-    public static void AdicionarAtividade(String nome, String descricao,int evento_id, LocalDate data, int limite_inscricao,String tipo_atividade){
+    public static void AdicionarAtividade(String nome, String descricao,int evento_id, LocalDate data, int limite_inscricao,String tipo_atividade) throws InformacoesInvalidasException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -64,8 +62,7 @@ public class TarefasAdminDB {
 
             st.executeUpdate();
         }catch(Exception e){
-//            Informações invalidas!
-            System.out.println(e.getMessage());
+            throw new InformacoesInvalidasException("Informações de atividade invalidas! Erro: "+e.getMessage());
         }finally{
             cx.fechar();
         }
@@ -101,7 +98,7 @@ public class TarefasAdminDB {
 
         return eventos;
     }
-    public static void editarEvento(int id, String nome, String descricao, LocalDate data_inicio,LocalDate data_fim){
+    public static void editarEvento(int id, String nome, String descricao, LocalDate data_inicio,LocalDate data_fim) throws InformacoesInvalidasException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -125,8 +122,7 @@ public class TarefasAdminDB {
 
             st.executeUpdate();
         }catch(Exception e){
-            System.out.println(e.getMessage());
-
+            throw new InformacoesInvalidasException("Informações inválidas: "e.getMessage());
 //            Informações invalidas!
 
         }finally {
@@ -135,7 +131,7 @@ public class TarefasAdminDB {
 
     }
 
-    public static void excluirEvento(int id){
+    public static void excluirEvento(int id) throws InformacoesInvalidasException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -179,8 +175,7 @@ public class TarefasAdminDB {
             s.executeUpdate();
 
         }catch(Exception e){
-            System.out.println(e.getMessage());
-
+            throw new InformacoesInvalidasException("Informações inválidas: "+e.getMessage());
 //            Informações invalidas!
 
         }finally {
