@@ -2,9 +2,11 @@ package Classes;
 
 import DAO.Conexao;
 import ENUM.StatusPagamento;
+import Exceptions.ConexaoBancoException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +16,7 @@ import java.util.List;
 
 
 public class TarefasParticipanteDB {
-    public static List<Evento> ListarEventosParticipando(int idParticipante){
+    public static List<Evento> ListarEventosParticipando(int idParticipante) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
 
         cx.conectar();
@@ -36,9 +38,8 @@ public class TarefasParticipanteDB {
                 eventos.add(e);
             }
 
-        }catch(Exception er){
-//            Erro com banco
-            System.out.println(er);
+        }catch(ConexaoBancoException er){
+            throw new ConexaoBancoException("Erro ao conectar com banco de dados! "+er.getMessage());
         }finally {
             cx.fechar();
         }
@@ -46,7 +47,7 @@ public class TarefasParticipanteDB {
         return eventos;
     }
 
-    public static List<Evento> ListarEventosNaoParticipando(int idParticipante){
+    public static List<Evento> ListarEventosNaoParticipando(int idParticipante) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
         List<Evento> eventos = new ArrayList();
@@ -67,9 +68,9 @@ public class TarefasParticipanteDB {
                 eventos.add(e);
             }
 
-        }catch(Exception er){
+        }catch(ConexaoBancoException er){
 //            Erro com banco
-            System.out.println(er);
+            throw new ConexaoBancoException("Erro ao conectar com banco de dados! "+er.getMessage());
         }finally {
             cx.fechar();
         }
@@ -77,7 +78,7 @@ public class TarefasParticipanteDB {
         return eventos;
     }
 
-    public static void inscricaoEvento(int idParticipante, int idEvento){
+    public static void inscricaoEvento(int idParticipante, int idEvento) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
 
@@ -90,14 +91,14 @@ public class TarefasParticipanteDB {
             st.setString(3, StatusPagamento.PENDENTE.name());
 
             st.executeUpdate();
-        }catch(Exception e){
-            System.out.println(e.getMessage());
+        }catch(ConexaoBancoException e){
+            throw new ConexaoBancoException("Erro ao iniciar banco de dados! "+e.getMessage());
         }finally {
             cx.fechar();
         }
     }
 
-    public static void inscricaoAtividades(int idParticipante, int idAtividade){
+    public static void inscricaoAtividades(int idParticipante, int idAtividade) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
 
@@ -109,14 +110,14 @@ public class TarefasParticipanteDB {
             st.setInt(2, idAtividade);
 
             st.executeUpdate();
-        }catch(Exception e){
-            System.out.println(e.getMessage());
+        }catch(ConexaoBancoException e){
+            throw new ConexaoBancoException("Erro ao conectar com banco de dados! "+e.getMessage());
         }finally {
             cx.fechar();
         }
     }
 
-    public static List<Atividade> ListarAtividadesParticipando(int idEvento, int idParticipante){
+    public static List<Atividade> ListarAtividadesParticipando(int idEvento, int idParticipante) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
         List<Atividade> atividades = new ArrayList();
@@ -140,9 +141,9 @@ public class TarefasParticipanteDB {
                 atividades.add(e);
             }
 
-        }catch(Exception er){
+        }catch(ConexaoBancoException er){
 //            Erro com banco
-            System.out.println(er);
+            throw new ConexaoBancoException("Erro ao conectar co banco de dados! "+er.getMessage());
         }finally {
             cx.fechar();
         }
@@ -150,7 +151,7 @@ public class TarefasParticipanteDB {
         return atividades;
     }
 
-    public static List<Atividade> ListarAtividadesNaoParticipando(int idEvento, int idParticipante){
+    public static List<Atividade> ListarAtividadesNaoParticipando(int idEvento, int idParticipante) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
         List<Atividade> atividades = new ArrayList();
@@ -174,9 +175,9 @@ public class TarefasParticipanteDB {
                 atividades.add(e);
             }
 
-        }catch(Exception er){
+        }catch(ConexaoBancoException er){
 //            Erro com banco
-            System.out.println(er);
+            throw new ConexaoBancoException("Erro ao conectar com banco de dados! "+er.getMessage());
         }finally {
             cx.fechar();
         }
@@ -184,7 +185,7 @@ public class TarefasParticipanteDB {
         return atividades;
     }
 
-    public static void SelecionaraPagamentosPendentes(int idParticipante){
+    public static void SelecionaraPagamentosPendentes(int idParticipante) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -193,14 +194,14 @@ public class TarefasParticipanteDB {
             ps.setString(1, StatusPagamento.PENDENTE.name());
             ps.setInt(2, idParticipante);
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (ConexaoBancoException e) {
+            throw new ConexaoBancoException("Erro ao conectar com banco de dados!"+e.getMessage());
         }finally {
             cx.fechar();
         }
 
     }
-    public static void pagar(int idEvento, int idParticipante){
+    public static void pagar(int idEvento, int idParticipante) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -217,8 +218,8 @@ public class TarefasParticipanteDB {
             st.setInt(4, idParticipante);
 
             st.executeUpdate();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (ConexaoBancoException e) {
+            throw new ConexaoBancoException("Erro ao conectar com banco de dados! "+e.getMessage());
         }
         finally {
             cx.fechar();
@@ -227,7 +228,7 @@ public class TarefasParticipanteDB {
 
     }
 
-    public static List<Evento> ListarEventosPagPendente(int idParticipante){
+    public static List<Evento> ListarEventosPagPendente(int idParticipante) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
         List<Evento> eventos = new ArrayList();
@@ -250,9 +251,9 @@ public class TarefasParticipanteDB {
                 eventos.add(e);
             }
 
-        }catch(Exception er){
+        }catch(ConexaoBancoException er){
 //            Erro com banco
-            System.out.println(er);
+            throw new ConexaoBancoException("Erro ao conectar com banco de dados! "+er.getMessage());
         }finally {
             cx.fechar();
         }

@@ -1,5 +1,7 @@
 package Classes;
 
+import java.sql.SQLException;
+
 import ENUM.PapelUsuario;
 import Exceptions.SenhaIncorretaException;
 
@@ -23,7 +25,7 @@ public class Participante extends Usuario {
         UsuarioDB.cadastrarParticipante(email, nome, senha, papel);
     }
 
-    public static Usuario login(String email, String senha) throws SenhaIncorretaException {
+    public static Usuario login(String email, String senha) throws SenhaIncorretaException, ClassNotFoundException, SQLException {
         Participante pt = UsuarioDB.selecionarParticipantePorEmail(email);
 
         if (pt == null) {
