@@ -1,6 +1,7 @@
 package Classes;
 
 import ENUM.PapelUsuario;
+import Exceptions.SenhaIncorretaException;
 
 public class Administrador extends Usuario {
 
@@ -12,14 +13,13 @@ public class Administrador extends Usuario {
         super(id, nome,email,senha, papel);
     }
 
-    public static Usuario login(String email, String senha){
+    public static Usuario login(String email, String senha) throws SenhaIncorretaException{
         Administrador admin = UsuarioDB.selecionarAdminPorEmail(email);
 
         if(admin.comparePassword(senha)){
             return admin;
         }else{
-//           Exceção de Senha incorreta
-            return null;
+            throw new SenhaIncorretaException("Senha incorreta para o email: "+email);
         }
     }
 

@@ -1,6 +1,7 @@
 import Classes.*;
 import DAO.Conexao;
 import ENUM.PapelUsuario;
+import Exceptions.SenhaIncorretaException;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -86,10 +87,15 @@ public class Principal {
         String email = scan.nextLine();
         System.out.println("Digite a senha:");
         String senha = scan.nextLine();
+        try{
+            Participante p = (Participante) Participante.login(email, senha);
+            System.out.println(p.getNome());
+            areaParticipante(p); 
+        } catch (SenhaIncorretaException e){
+            System.out.println("Erro: " + e.getMessage());
+        } 
 
-        Participante p = (Participante) Participante.login(email, senha);
-        System.out.println(p.getNome());
-        areaParticipante(p);
+
     }
 
     public static void loginComoAdmin(){
@@ -99,8 +105,17 @@ public class Principal {
         System.out.println("Digite a senha:");
         String senha = scan.nextLine();
 
-        Administrador a = (Administrador) Administrador.login(email,senha);
-        System.out.println(a.getNome());
+        try{
+            Administrador a = (Administrador) Administrador.login(email,senha);
+            System.out.println(a.getNome());
+            menuAdmin();
+        }catch (SenhaIncorretaException e){
+            System.out.println("Erro de login: "+e.getLocalizedMessage());
+        }catch (Exception e){
+            System.out.println("Ocorreu um erro inesperado durante o login: "+e.getMessage());
+        }
+        
+        
 
         menuAdmin();
 
