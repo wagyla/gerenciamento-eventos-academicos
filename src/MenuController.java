@@ -3,10 +3,11 @@ import Classes.Participante;
 import ENUM.PapelUsuario;
 import Exceptions.SenhaIncorretaException;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MenuController {
-    public static void menu() throws SenhaIncorretaException {
+    public static void menu() throws SenhaIncorretaException, SQLException, ClassNotFoundException {
         int op = 0;
         do {
             Scanner scan = new Scanner(System.in);
@@ -72,7 +73,7 @@ public class MenuController {
         System.out.println("Cadastrado com sucesso!!!!!");
     }
 
-    public static void login() throws SenhaIncorretaException {
+    public static void login() throws SenhaIncorretaException, SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         System.out.println("------");
         System.out.println("LOGIN:");
