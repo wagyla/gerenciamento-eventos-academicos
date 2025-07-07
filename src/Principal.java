@@ -15,10 +15,14 @@ public class Principal {
     public static void main(String[] args) {
          Conexao conexao = new Conexao();
          conexao.initBD();
-         menu();
+        try {
+            menu();
+        } catch (SenhaIncorretaException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static void menu(){
+    public static void menu() throws SenhaIncorretaException {
         int op = 0;
         do {
             Scanner scan = new Scanner(System.in);
@@ -81,21 +85,16 @@ public class Principal {
         System.out.println("Cadastrado com sucesso!!!!!");
     }
 
-    public static void login() {
+    public static void login() throws SenhaIncorretaException {
         Scanner scan = new Scanner(System.in);
         System.out.println("Digite o email:");
         String email = scan.nextLine();
         System.out.println("Digite a senha:");
         String senha = scan.nextLine();
-        try{
-            Participante p = (Participante) Participante.login(email, senha);
-            System.out.println(p.getNome());
-            areaParticipante(p); 
-        } catch (SenhaIncorretaException e){
-            System.out.println("Erro: " + e.getMessage());
-        } 
 
-
+        Participante p = (Participante) Participante.login(email, senha);
+        System.out.println(p.getNome());
+        areaParticipante(p);
     }
 
     public static void loginComoAdmin(){
@@ -105,17 +104,8 @@ public class Principal {
         System.out.println("Digite a senha:");
         String senha = scan.nextLine();
 
-        try{
-            Administrador a = (Administrador) Administrador.login(email,senha);
-            System.out.println(a.getNome());
-            menuAdmin();
-        }catch (SenhaIncorretaException e){
-            System.out.println("Erro de login: "+e.getLocalizedMessage());
-        }catch (Exception e){
-            System.out.println("Ocorreu um erro inesperado durante o login: "+e.getMessage());
-        }
-        
-        
+        Administrador a = (Administrador) Administrador.login(email,senha);
+        System.out.println(a.getNome());
 
         menuAdmin();
 

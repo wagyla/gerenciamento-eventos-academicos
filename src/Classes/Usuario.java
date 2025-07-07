@@ -1,6 +1,7 @@
 package Classes;
 
 import ENUM.PapelUsuario;
+import Exceptions.SenhaIncorretaException;
 
 public abstract class Usuario {
     private int id;
@@ -50,7 +51,7 @@ public abstract class Usuario {
         return password.equals(this.senha);
     }
 
-    public static Usuario login(String email, String senha){
+    public static Usuario login(String email, String senha) throws SenhaIncorretaException {
         return null;
     }
 
