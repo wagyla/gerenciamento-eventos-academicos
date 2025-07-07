@@ -1,5 +1,6 @@
 package Classes;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,18 +8,23 @@ public class Atividade {
     private int id;
     private String nome;
     private String descricao;
-    private String data;
+    private LocalDate data;
     private int limiteInscricoes;
     private String tipo;
-    private List<Participante> inscritos = new ArrayList<>();
 
-    public String getData() {
+    public Atividade(int id, String nome,String descricao,LocalDate data, int limiteInscricoes,String tipo) {
+        this.data = data;
+        this.descricao = descricao;
+        this.id = id;
+        this.limiteInscricoes = limiteInscricoes;
+        this.nome = nome;
+        this.tipo = tipo;
+    }
+
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(String data) {
-        this.data = data;
-    }
 
     public String getDescricao() {
         return descricao;
@@ -36,13 +42,6 @@ public class Atividade {
         this.id = id;
     }
 
-    public List<Participante> getInscritos() {
-        return inscritos;
-    }
-
-    public void setInscritos(List<Participante> inscritos) {
-        this.inscritos = inscritos;
-    }
 
     public int getLimiteInscricoes() {
         return limiteInscricoes;

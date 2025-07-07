@@ -1,5 +1,6 @@
 package Classes;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,48 +8,41 @@ public class Evento {
     private int id;
     private String nome;
     private String descricao;
-    private String dataInicio;
-    private String dataFim;
-    private List<Atividade> atividades = new ArrayList<>();
+    private LocalDate dataInicio;
+    private LocalDate dataFim;
 
-    public String getDataFim() {
+    public Evento( int id, String nome , String descricao, LocalDate dataInicio, LocalDate dataFim ) {
+        this.dataFim = dataFim;
+        this.dataInicio = dataInicio;
+        this.descricao = descricao;
+        this.id = id;
+        this.nome = nome;
+    }
+
+
+    public LocalDate getDataFim() {
         return dataFim;
     }
 
-    public void setDataFim(String dataFim) {
-        this.dataFim = dataFim;
-    }
-
-
-    public String getDataInicio() {
+    public LocalDate getDataInicio() {
         return dataInicio;
-    }
-
-    public void setDataInicio(String dataInicio) {
-        this.dataInicio = dataInicio;
     }
 
     public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public static void criarEvento(String nome, String descricao, LocalDate data_inicio, LocalDate data_fim){
+        TarefasAdminDB.criarEvento(nome, descricao, data_inicio, data_fim);
     }
+
 }
