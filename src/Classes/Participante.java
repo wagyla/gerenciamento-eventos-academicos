@@ -1,4 +1,7 @@
 package Classes;
+
+import java.sql.SQLException;
+
 import ENUM.PapelUsuario;
 import ENUM.StatusPagamento;
 import Exceptions.SenhaIncorretaException;
@@ -40,30 +43,32 @@ public class Participante extends Usuario implements UsuarioInterface{
         super(id, email, nome, senha, papel);
     }
 
-    public static void cadastrar(String email,String nome,String senha, PapelUsuario papel){
-        if(papel == PapelUsuario.ADMINISTRADOR) {
+    public static void cadastrar(String email, String nome, String senha, PapelUsuario papel) {
+        if (papel == PapelUsuario.ADMINISTRADOR) {
             throw new RuntimeException("Participante não pode ser admin");
         }
-        UsuarioDB.cadastrarParticipante(email,nome,senha,papel);
+        if (email == null || !email.contains("@")) {
+            throw new IllegalArgumentException("E-mail inválido: deve conter '@'.");
+        }
+        UsuarioDB.cadastrarParticipante(email, nome, senha, papel);
     }
 
-
-    public static Usuario login(String email, String senha) throws SenhaIncorretaException{
+    public static Usuario login(String email, String senha) throws SenhaIncorretaException, ClassNotFoundException, SQLException {
         Participante pt = UsuarioDB.selecionarParticipantePorEmail(email);
-        
-        if (pt == null){
-            throw new SenhaIncorretaException("Usuário não encontrado para o email "+email);
+
+        if (pt == null) {
+            throw new SenhaIncorretaException("Usuário não encontrado para o email " + email);
         }
-        if(pt.comparePassword(senha)){
+        if (pt.comparePassword(senha)) {
             return pt;
-        }else{
-//           Exceção de Senha incorreta
-            throw new SenhaIncorretaException("Senha incorreta para o email: " +email);
+        } else {
+            throw new SenhaIncorretaException("Senha incorreta para o email: " + email);
         }
     }
 
     public StatusPagamento coletarStatusDePagamento(int eventoID){
         return TarefasParticipanteDB.coletarStatusPagamento(this.getId(), eventoID);
+
     }
 
 }

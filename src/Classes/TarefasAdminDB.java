@@ -3,9 +3,12 @@ package Classes;
 import Conexao.Conexao;
 import ENUM.PapelUsuario;
 import ENUM.StatusPagamento;
+import Exceptions.ConexaoBancoException;
+import Exceptions.InformacoesInvalidasException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,12 +17,10 @@ import java.util.List;
 
 public class TarefasAdminDB {
 
-    public static void criarEvento(String nome, String descricao, LocalDate data_inicio,LocalDate data_fim){
+    public static void criarEvento(String nome, String descricao, LocalDate data_inicio,LocalDate data_fim) throws InformacoesInvalidasException, ClassNotFoundException, SQLException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
-
-
             String criarEvento = """
                 insert into eventos(nome, descricao, data_inicio, data_fim) values
                 (?, ?, ?, ?)
@@ -33,8 +34,7 @@ public class TarefasAdminDB {
 
             st.executeUpdate();
         }catch(Exception e){
-            System.out.println(e.getMessage());
-
+            throw new InformacoesInvalidasException("Informações Inválidas! Erro: "+e.getMessage());
 //            Informações invalidas!
 
         }finally {
@@ -44,7 +44,7 @@ public class TarefasAdminDB {
     }
 
 
-    public static void AdicionarAtividade(String nome, String descricao,int evento_id, LocalDate data, int limite_inscricao,String tipo_atividade){
+    public static void AdicionarAtividade(String nome, String descricao,int evento_id, LocalDate data, int limite_inscricao,String tipo_atividade) throws InformacoesInvalidasException, ClassNotFoundException, SQLException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -64,15 +64,14 @@ public class TarefasAdminDB {
 
             st.executeUpdate();
         }catch(Exception e){
-//            Informações invalidas!
-            System.out.println(e.getMessage());
+            throw new InformacoesInvalidasException("Informações de atividade invalidas! Erro: "+e.getMessage());
         }finally{
             cx.fechar();
         }
 
     }
 
-    public static List<Evento> ListarEventos(){
+    public static List<Evento> ListarEventos() throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
         List<Evento> eventos = new ArrayList();
@@ -92,16 +91,16 @@ public class TarefasAdminDB {
                 eventos.add(e);
             }
 
-        }catch(Exception er){
+        }catch(ConexaoBancoException er){
 //            Erro com banco
-            System.out.println(er);
+            throw new ConexaoBancoException("Erro ao conectar banco de dados! ");
         }finally {
             cx.fechar();
         }
 
         return eventos;
     }
-    public static void editarEvento(int id, String nome, String descricao, LocalDate data_inicio,LocalDate data_fim){
+    public static void editarEvento(int id, String nome, String descricao, LocalDate data_inicio,LocalDate data_fim) throws InformacoesInvalidasException, ClassNotFoundException, SQLException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -124,18 +123,13 @@ public class TarefasAdminDB {
             st.setInt(5, id);
 
             st.executeUpdate();
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-
-//            Informações invalidas!
-
         }finally {
             cx.fechar();
         }
 
     }
 
-    public static void excluirEvento(int id){
+    public static void excluirEvento(int id) throws InformacoesInvalidasException, ClassNotFoundException, SQLException, InformacoesInvalidasException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -178,9 +172,8 @@ public class TarefasAdminDB {
             sm.executeUpdate();
             s.executeUpdate();
 
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-
+        }catch(InformacoesInvalidasException e){
+            throw new InformacoesInvalidasException("Informações inválidas: "+e.getMessage());
 //            Informações invalidas!
 
         }finally {
@@ -189,7 +182,7 @@ public class TarefasAdminDB {
 
     }
 
-    public static void confirmarPagamento(int idEvento, int idParticipante){
+    public static void confirmarPagamento(int idEvento, int idParticipante) throws ClassNotFoundException, SQLException, InformacoesInvalidasException{
         Conexao cx = new Conexao();
         cx.conectar();
 
@@ -215,7 +208,7 @@ public class TarefasAdminDB {
 
     }
 
-    public static List<Participante> ListarParticipantesAguardandoConfirmacao(int idEvento){
+    public static List<Participante> ListarParticipantesAguardandoConfirmacao(int idEvento) throws ClassNotFoundException, SQLException, InformacoesInvalidasException{
         Conexao cx = new Conexao();
         cx.conectar();
         List<Participante> participantes = new ArrayList();
@@ -237,7 +230,7 @@ public class TarefasAdminDB {
                 participantes.add(new Participante(id, email, nome, senha, PapelUsuario.valueOf(papel)));
             }
         }catch (Exception err){
-            System.out.println(err.getMessage());
+            System.out.println(err.getMessage()); // nao entendi qual é esse erro
         }finally {
             cx.fechar();
         }
