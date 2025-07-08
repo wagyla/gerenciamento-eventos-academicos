@@ -2,13 +2,15 @@ package Classes;
 
 import DAO.Conexao;
 import ENUM.PapelUsuario;
+import Exceptions.UsuarioInvalido;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UsuarioDB {
 
-    public static Participante selecionarParticipantePorEmail(String email){
+    public static Participante selecionarParticipantePorEmail(String email) throws ClassNotFoundException, SQLException, UsuarioInvalido{
         Conexao cx = new Conexao();
         cx.conectar();
         Participante p = null;
@@ -31,7 +33,8 @@ public class UsuarioDB {
 //                Não temos o usuario, Exceção usuario não encontrado
             }
 
-        }catch(Exception e){
+        }catch(UsuarioInvalido e){
+            throw new UsuarioInvalido("Usuário de senha não correspondem! "+e.getMessage());
             //  Fazer tratamento de exceção, Usuario não encontrado
             //  Possivel nome: Usuario e senha não correspondem!
         }finally {
@@ -41,7 +44,7 @@ public class UsuarioDB {
         return p;
     }
 
-    public static void cadastrarParticipante (String email,String nome,String senha, PapelUsuario papel){
+    public static void cadastrarParticipante (String email,String nome,String senha, PapelUsuario papel) throws ClassNotFoundException, SQLException, UsuarioInvalido{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -54,14 +57,15 @@ public class UsuarioDB {
             st.setString(4, papel.name());
 
             st.executeUpdate();
-        }catch(Exception e){
+        }catch(UsuarioInvalido e){
+            throw new UsuarioInvalido("Usuário já cadastrado! "+e.getMessage());
             //Erro Usuario ja cadastrado
         }finally {
             cx.fechar();
         }
     }
 
-    public static Administrador selecionarAdminPorEmail(String email){
+    public static Administrador selecionarAdminPorEmail(String email) throws ClassNotFoundException, SQLException, UsuarioInvalido{
         Conexao cx = new Conexao();
         cx.conectar();
         Administrador adm = null;
@@ -84,10 +88,12 @@ public class UsuarioDB {
 
                 adm = new Administrador(id, email, nome, senha, PapelUsuario.valueOf(papel));
             }else{
-//                Nao temos o usuario
+                throw new UsuarioInvalido("Usuário não encontrado.");
+
             }
 
-        }catch(Exception e){
+        }catch(UsuarioInvalido e){
+            throw new UsuarioInvalido("Usuário e senha não correspondem! "+e.getMessage());
             //  Fazer tratamento de exceção, Usuario não enconterado
             //  Possivel nome: Usuario e senha não correspondem!
         }finally {
