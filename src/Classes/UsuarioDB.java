@@ -1,6 +1,6 @@
 package Classes;
 
-import DAO.Conexao;
+import Conexao.Conexao;
 import ENUM.PapelUsuario;
 import Exceptions.UsuarioInvalido;
 
@@ -101,5 +101,6 @@ public class UsuarioDB {
         }
         return adm;
     }
+
 
 }
