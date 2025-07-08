@@ -1,5 +1,8 @@
 package Classes;
 
+import Exceptions.InformacoesInvalidasException;
+
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +44,7 @@ public class Evento {
         return nome;
     }
 
-    public static void criarEvento(String nome, String descricao, LocalDate data_inicio, LocalDate data_fim){
+    public static void criarEvento(String nome, String descricao, LocalDate data_inicio, LocalDate data_fim) throws SQLException, ClassNotFoundException, InformacoesInvalidasException {
         TarefasAdminDB.criarEvento(nome, descricao, data_inicio, data_fim);
     }
 

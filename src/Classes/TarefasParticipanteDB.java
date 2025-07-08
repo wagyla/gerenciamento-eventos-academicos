@@ -276,10 +276,7 @@ public class TarefasParticipanteDB {
             if(resultado.next()){
                 st =  StatusPagamento.valueOf(resultado.getString("status_pagamento"));
             }
-        } catch (StatusPagamentoException e) {
-//            Erro ao coletar status, provavelmente usuario nao inscrito no evento
-            throw new StatusPagamentoException("Erro ao coletar status de pagamento! "+e.getMessage());
-        }finally {
+        } finally {
             cx.fechar();
         }
 

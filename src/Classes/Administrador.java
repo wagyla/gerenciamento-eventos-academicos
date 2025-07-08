@@ -1,6 +1,7 @@
 package Classes;
 
 import ENUM.PapelUsuario;
+import Exceptions.UsuarioInvalido;
 
 import java.sql.SQLException;
 
@@ -14,13 +15,12 @@ public class Administrador extends Usuario implements UsuarioInterface {
         super(id, nome,email,senha, papel);
     }
 
-    public static Usuario login(String email, String senha) throws SQLException, ClassNotFoundException {
+    public static Usuario login(String email, String senha) throws SQLException, ClassNotFoundException, UsuarioInvalido {
         Administrador admin = UsuarioDB.selecionarAdminPorEmail(email);
 
         if(admin.comparePassword(senha)){
             return admin;
         }else{
-//           Exceção de Senha incorreta
             return null;
         }
     }

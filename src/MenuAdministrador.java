@@ -3,6 +3,7 @@ import Classes.Participante;
 import Classes.TarefasAdminDB;
 import ENUM.PapelUsuario;
 import Exceptions.InformacoesInvalidasException;
+import Exceptions.StatusPagamentoException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MenuAdministrador {
-    public static void menuAdmin() throws SQLException, ClassNotFoundException, InformacoesInvalidasException {
+    public static void menuAdmin() throws SQLException, ClassNotFoundException, InformacoesInvalidasException, StatusPagamentoException {
         int op = 0;
         do {
             Scanner scan = new Scanner(System.in);
@@ -53,7 +54,7 @@ public class MenuAdministrador {
         } while(op != 0);
     }
 
-    public static void menuCriarEvento() {
+    public static void menuCriarEvento() throws SQLException, ClassNotFoundException, InformacoesInvalidasException {
         Scanner scan = new Scanner(System.in);
         System.out.println("Digite o nome do evento:");
         String nome = scan.nextLine();
@@ -163,7 +164,7 @@ public class MenuAdministrador {
         System.out.println("Evento excluído com sucesso!");
     }
 
-    public static void painelAdministrativo() throws SQLException, ClassNotFoundException {
+    public static void painelAdministrativo() throws SQLException, ClassNotFoundException, StatusPagamentoException {
         int op = 0;
         do {
             Scanner scan = new Scanner(System.in);
@@ -226,7 +227,7 @@ public class MenuAdministrador {
         }
     }
 
-    public static void VizualizaStatusPagamento() throws SQLException, ClassNotFoundException {
+    public static void VizualizaStatusPagamento() throws SQLException, ClassNotFoundException, StatusPagamentoException {
         Scanner scan = new Scanner(System.in);
         List<Evento> eventos = TarefasAdminDB.ListarEventos();
         System.out.println("Selecione um evento:");

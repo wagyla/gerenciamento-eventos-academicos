@@ -3,12 +3,14 @@ import Classes.Participante;
 import ENUM.PapelUsuario;
 import Exceptions.InformacoesInvalidasException;
 import Exceptions.SenhaIncorretaException;
+import Exceptions.StatusPagamentoException;
+import Exceptions.UsuarioInvalido;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MenuController {
-    public static void menu() throws SenhaIncorretaException, SQLException, ClassNotFoundException, InformacoesInvalidasException {
+    public static void menu() throws SenhaIncorretaException, SQLException, ClassNotFoundException, InformacoesInvalidasException, UsuarioInvalido, StatusPagamentoException {
         int op = 0;
         do {
             Scanner scan = new Scanner(System.in);
@@ -37,7 +39,7 @@ public class MenuController {
         } while(op != 0);
     }
 
-    public static void cadastrar(){
+    public static void cadastrar() throws SQLException, ClassNotFoundException, UsuarioInvalido {
         Scanner scan = new Scanner(System.in);
         System.out.println("---------");
         System.out.println("CADASTRO:");
@@ -74,7 +76,7 @@ public class MenuController {
         System.out.println("Cadastrado com sucesso!!!!!");
     }
 
-    public static void login() throws SenhaIncorretaException, SQLException, ClassNotFoundException {
+    public static void login() throws SenhaIncorretaException, SQLException, ClassNotFoundException, UsuarioInvalido {
         Scanner scan = new Scanner(System.in);
         System.out.println("------");
         System.out.println("LOGIN:");
@@ -90,7 +92,7 @@ public class MenuController {
         MenuParticipante.areaParticipante(p);
     }
 
-    public static void loginComoAdmin() throws SQLException, ClassNotFoundException, InformacoesInvalidasException {
+    public static void loginComoAdmin() throws SQLException, ClassNotFoundException, InformacoesInvalidasException, StatusPagamentoException, UsuarioInvalido {
         Scanner scan = new Scanner(System.in);
         System.out.println("---------------------");
         System.out.println("LOGIN ADIMINISTRADOR:");
