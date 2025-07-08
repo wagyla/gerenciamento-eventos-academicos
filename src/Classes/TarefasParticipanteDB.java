@@ -3,6 +3,7 @@ package Classes;
 import Conexao.Conexao;
 import ENUM.StatusPagamento;
 import Exceptions.ConexaoBancoException;
+import Exceptions.StatusPagamentoException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -261,7 +262,7 @@ public class TarefasParticipanteDB {
         return eventos;
     }
 
-    public static StatusPagamento coletarStatusPagamento(int idParticipante, int idEvento){
+    public static StatusPagamento coletarStatusPagamento(int idParticipante, int idEvento) throws ClassNotFoundException, SQLException, StatusPagamentoException{
         Conexao cx = new Conexao();
         cx.conectar();
         StatusPagamento st = null;
@@ -275,9 +276,9 @@ public class TarefasParticipanteDB {
             if(resultado.next()){
                 st =  StatusPagamento.valueOf(resultado.getString("status_pagamento"));
             }
-        } catch (Exception e) {
+        } catch (StatusPagamentoException e) {
 //            Erro ao coletar status, provavelmente usuario nao inscrito no evento
-            System.out.println(e.getMessage());
+            throw new StatusPagamentoException("Erro ao coletar status de pagamento! "+e.getMessage());
         }finally {
             cx.fechar();
         }
@@ -285,7 +286,7 @@ public class TarefasParticipanteDB {
         return st;
     }
 
-    public static void cancelarInscricao(int idParticipante, int idEvento){
+    public static void cancelarInscricao(int idParticipante, int idEvento) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -296,8 +297,8 @@ public class TarefasParticipanteDB {
 
             ps.executeUpdate();
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (ConexaoBancoException e) {
+            throw new SQLException("Erro ao conectar com banco de dados! "+e.getMessage());
         }finally{
             cx.fechar();
         }
