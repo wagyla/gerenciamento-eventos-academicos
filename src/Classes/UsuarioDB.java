@@ -30,14 +30,10 @@ public class UsuarioDB {
                 
                 p = new Participante(id, email, nome, senha, PapelUsuario.valueOf(papel));
             }else{
-//                Não temos o usuario, Exceção usuario não encontrado
+
             }
 
-        }catch(UsuarioInvalido e){
-            throw new UsuarioInvalido("Usuário de senha não correspondem! "+e.getMessage());
-            //  Fazer tratamento de exceção, Usuario não encontrado
-            //  Possivel nome: Usuario e senha não correspondem!
-        }finally {
+        } finally {
             cx.fechar();
         }
 
@@ -57,10 +53,7 @@ public class UsuarioDB {
             st.setString(4, papel.name());
 
             st.executeUpdate();
-        }catch(UsuarioInvalido e){
-            throw new UsuarioInvalido("Usuário já cadastrado! "+e.getMessage());
-            //Erro Usuario ja cadastrado
-        }finally {
+        } finally {
             cx.fechar();
         }
     }

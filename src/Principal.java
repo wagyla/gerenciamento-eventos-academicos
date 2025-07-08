@@ -1,5 +1,10 @@
 import Conexao.Conexao;
+import Exceptions.InformacoesInvalidasException;
 import Exceptions.SenhaIncorretaException;
+import Exceptions.StatusPagamentoException;
+import Exceptions.UsuarioInvalido;
+
+import java.sql.SQLException;
 
 public class Principal {
 
@@ -8,7 +13,8 @@ public class Principal {
 //          conexao.initBD();
          try{
             MenuController.menu();
-        } catch (SenhaIncorretaException e) {
+        } catch (SenhaIncorretaException | SQLException | ClassNotFoundException | InformacoesInvalidasException |
+                 UsuarioInvalido | StatusPagamentoException e) {
             throw new RuntimeException(e);
         }
     }

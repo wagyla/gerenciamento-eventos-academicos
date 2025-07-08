@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import ENUM.PapelUsuario;
 import ENUM.StatusPagamento;
 import Exceptions.SenhaIncorretaException;
+import Exceptions.StatusPagamentoException;
+import Exceptions.UsuarioInvalido;
 
 public class Participante extends Usuario implements UsuarioInterface{
     private static Double valorAluno = 200.0;
@@ -43,7 +45,7 @@ public class Participante extends Usuario implements UsuarioInterface{
         super(id, email, nome, senha, papel);
     }
 
-    public static void cadastrar(String email, String nome, String senha, PapelUsuario papel) {
+    public static void cadastrar(String email, String nome, String senha, PapelUsuario papel) throws SQLException, ClassNotFoundException, UsuarioInvalido {
         if (papel == PapelUsuario.ADMINISTRADOR) {
             throw new RuntimeException("Participante não pode ser admin");
         }
@@ -53,7 +55,7 @@ public class Participante extends Usuario implements UsuarioInterface{
         UsuarioDB.cadastrarParticipante(email, nome, senha, papel);
     }
 
-    public static Usuario login(String email, String senha) throws SenhaIncorretaException, ClassNotFoundException, SQLException {
+    public static Usuario login(String email, String senha) throws SenhaIncorretaException, ClassNotFoundException, SQLException, UsuarioInvalido {
         Participante pt = UsuarioDB.selecionarParticipantePorEmail(email);
 
         if (pt == null) {
@@ -66,7 +68,7 @@ public class Participante extends Usuario implements UsuarioInterface{
         }
     }
 
-    public StatusPagamento coletarStatusDePagamento(int eventoID){
+    public StatusPagamento coletarStatusDePagamento(int eventoID) throws SQLException, StatusPagamentoException, ClassNotFoundException {
         return TarefasParticipanteDB.coletarStatusPagamento(this.getId(), eventoID);
 
     }

@@ -5,7 +5,6 @@ import ENUM.PapelUsuario;
 import ENUM.StatusPagamento;
 import Exceptions.ConexaoBancoException;
 import Exceptions.InformacoesInvalidasException;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +32,7 @@ public class TarefasAdminDB {
             st.setString(4, data_fim.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
             st.executeUpdate();
-        }catch(InformacoesInvalidasException e){
+        }catch(Exception e){
             throw new InformacoesInvalidasException("Informações Inválidas! Erro: "+e.getMessage());
 //            Informações invalidas!
 
@@ -63,7 +62,7 @@ public class TarefasAdminDB {
             st.setString(6, tipo_atividade);
 
             st.executeUpdate();
-        }catch(InformacoesInvalidasException e){
+        }catch(Exception e){
             throw new InformacoesInvalidasException("Informações de atividade invalidas! Erro: "+e.getMessage());
         }finally{
             cx.fechar();
@@ -172,17 +171,13 @@ public class TarefasAdminDB {
             sm.executeUpdate();
             s.executeUpdate();
 
-        }catch(InformacoesInvalidasException e){
-            throw new InformacoesInvalidasException("Informações inválidas: "+e.getMessage());
-//            Informações invalidas!
-
-        }finally {
+        } finally {
             cx.fechar();
         }
 
     }
 
-    public static void confirmarPagamento(int idEvento, int idParticipante) throws ClassNotFoundException, SQLException, Stat{
+    public static void confirmarPagamento(int idEvento, int idParticipante) throws ClassNotFoundException, SQLException, InformacoesInvalidasException{
         Conexao cx = new Conexao();
         cx.conectar();
 
@@ -200,15 +195,15 @@ public class TarefasAdminDB {
             ps.setInt(3, idParticipante);
             ps.setString(4, StatusPagamento.AGUARDANDO_CONFIRMACAO.name());
             ps.executeUpdate();
-        } catch (InformacoesInvalidasException e) {
-            throw new InformacoesInvalidasException("Erro ao confirmar pagamento! "+e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }finally {
             cx.fechar();
         }
 
     }
 
-    public static List<Participante> ListarParticipantesAguardandoConfirmacao(int idEvento) throws ClassNotFoundException, SQLException, ConexaoBancoException{
+    public static List<Participante> ListarParticipantesAguardandoConfirmacao(int idEvento) throws ClassNotFoundException, SQLException, InformacoesInvalidasException{
         Conexao cx = new Conexao();
         cx.conectar();
         List<Participante> participantes = new ArrayList();
@@ -229,8 +224,8 @@ public class TarefasAdminDB {
 
                 participantes.add(new Participante(id, email, nome, senha, PapelUsuario.valueOf(papel)));
             }
-        }catch (ConexaoBancoException err){
-            throw new ConexaoBancoException("Erro ao listar participante aguardando confirmação! "+err.getMessage());
+        }catch (Exception err){
+            System.out.println(err.getMessage()); // nao entendi qual é esse erro
         }finally {
             cx.fechar();
         }
@@ -238,7 +233,7 @@ public class TarefasAdminDB {
         return participantes;
     }
 
-    public static List<Participante> ListarParticipantes(int idEvento) throws ClassNotFoundException, SQLException{
+    public static List<Participante> ListarParticipantes(int idEvento) throws SQLException, ClassNotFoundException {
         Conexao cx = new Conexao();
         cx.conectar();
         List<Participante> participantes = new ArrayList();
@@ -263,8 +258,8 @@ public class TarefasAdminDB {
 
                 participantes.add(new Participante(id, email, nome, senha, PapelUsuario.valueOf(papel)));
             }
-        }catch (ConexaoBancoException err){
-            throw new ConexaoBancoException ("Erro ao listar participantes! "+err.getMessage());
+        }catch (Exception err){
+            System.out.println(err.getMessage());
         }finally {
             cx.fechar();
         }
