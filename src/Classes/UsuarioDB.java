@@ -5,10 +5,11 @@ import ENUM.PapelUsuario;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UsuarioDB {
 
-    public static Participante selecionarParticipantePorEmail(String email){
+    public static Participante selecionarParticipantePorEmail(String email) throws SQLException, ClassNotFoundException {
         Conexao cx = new Conexao();
         cx.conectar();
         Participante p = null;
@@ -41,7 +42,7 @@ public class UsuarioDB {
         return p;
     }
 
-    public static void cadastrarParticipante (String email,String nome,String senha, PapelUsuario papel){
+    public static void cadastrarParticipante (String email,String nome,String senha, PapelUsuario papel) throws SQLException, ClassNotFoundException {
         Conexao cx = new Conexao();
         cx.conectar();
         try{
@@ -61,7 +62,7 @@ public class UsuarioDB {
         }
     }
 
-    public static Administrador selecionarAdminPorEmail(String email){
+    public static Administrador selecionarAdminPorEmail(String email) throws SQLException, ClassNotFoundException {
         Conexao cx = new Conexao();
         cx.conectar();
         Administrador adm = null;

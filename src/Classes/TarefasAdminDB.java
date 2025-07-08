@@ -5,7 +5,6 @@ import ENUM.PapelUsuario;
 import ENUM.StatusPagamento;
 import Exceptions.ConexaoBancoException;
 import Exceptions.InformacoesInvalidasException;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -172,11 +171,7 @@ public class TarefasAdminDB {
             sm.executeUpdate();
             s.executeUpdate();
 
-        }catch(InformacoesInvalidasException e){
-            throw new InformacoesInvalidasException("Informações inválidas: "+e.getMessage());
-//            Informações invalidas!
-
-        }finally {
+        } finally {
             cx.fechar();
         }
 
@@ -238,7 +233,7 @@ public class TarefasAdminDB {
         return participantes;
     }
 
-    public static List<Participante> ListarParticipantes(int idEvento){
+    public static List<Participante> ListarParticipantes(int idEvento) throws SQLException, ClassNotFoundException {
         Conexao cx = new Conexao();
         cx.conectar();
         List<Participante> participantes = new ArrayList();

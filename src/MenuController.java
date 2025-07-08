@@ -1,13 +1,14 @@
 import Classes.Administrador;
 import Classes.Participante;
 import ENUM.PapelUsuario;
+import Exceptions.InformacoesInvalidasException;
 import Exceptions.SenhaIncorretaException;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MenuController {
-    public static void menu() throws SenhaIncorretaException, SQLException, ClassNotFoundException {
+    public static void menu() throws SenhaIncorretaException, SQLException, ClassNotFoundException, InformacoesInvalidasException {
         int op = 0;
         do {
             Scanner scan = new Scanner(System.in);
@@ -89,7 +90,7 @@ public class MenuController {
         MenuParticipante.areaParticipante(p);
     }
 
-    public static void loginComoAdmin(){
+    public static void loginComoAdmin() throws SQLException, ClassNotFoundException, InformacoesInvalidasException {
         Scanner scan = new Scanner(System.in);
         System.out.println("---------------------");
         System.out.println("LOGIN ADIMINISTRADOR:");
