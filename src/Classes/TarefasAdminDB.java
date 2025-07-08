@@ -33,7 +33,7 @@ public class TarefasAdminDB {
             st.setString(4, data_fim.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
             st.executeUpdate();
-        }catch(Exception e){
+        }catch(InformacoesInvalidasException e){
             throw new InformacoesInvalidasException("Informações Inválidas! Erro: "+e.getMessage());
 //            Informações invalidas!
 
@@ -63,7 +63,7 @@ public class TarefasAdminDB {
             st.setString(6, tipo_atividade);
 
             st.executeUpdate();
-        }catch(Exception e){
+        }catch(InformacoesInvalidasException e){
             throw new InformacoesInvalidasException("Informações de atividade invalidas! Erro: "+e.getMessage());
         }finally{
             cx.fechar();
@@ -182,7 +182,7 @@ public class TarefasAdminDB {
 
     }
 
-    public static void confirmarPagamento(int idEvento, int idParticipante) throws ClassNotFoundException, SQLException, InformacoesInvalidasException{
+    public static void confirmarPagamento(int idEvento, int idParticipante) throws ClassNotFoundException, SQLException, Stat{
         Conexao cx = new Conexao();
         cx.conectar();
 
@@ -200,15 +200,15 @@ public class TarefasAdminDB {
             ps.setInt(3, idParticipante);
             ps.setString(4, StatusPagamento.AGUARDANDO_CONFIRMACAO.name());
             ps.executeUpdate();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (InformacoesInvalidasException e) {
+            throw new InformacoesInvalidasException("Erro ao confirmar pagamento! "+e.getMessage());
         }finally {
             cx.fechar();
         }
 
     }
 
-    public static List<Participante> ListarParticipantesAguardandoConfirmacao(int idEvento) throws ClassNotFoundException, SQLException, InformacoesInvalidasException{
+    public static List<Participante> ListarParticipantesAguardandoConfirmacao(int idEvento) throws ClassNotFoundException, SQLException, ConexaoBancoException{
         Conexao cx = new Conexao();
         cx.conectar();
         List<Participante> participantes = new ArrayList();
@@ -229,8 +229,8 @@ public class TarefasAdminDB {
 
                 participantes.add(new Participante(id, email, nome, senha, PapelUsuario.valueOf(papel)));
             }
-        }catch (Exception err){
-            System.out.println(err.getMessage()); // nao entendi qual é esse erro
+        }catch (ConexaoBancoException err){
+            throw new ConexaoBancoException("Erro ao listar participante aguardando confirmação! "+err.getMessage());
         }finally {
             cx.fechar();
         }
@@ -238,7 +238,7 @@ public class TarefasAdminDB {
         return participantes;
     }
 
-    public static List<Participante> ListarParticipantes(int idEvento){
+    public static List<Participante> ListarParticipantes(int idEvento) throws ClassNotFoundException, SQLException{
         Conexao cx = new Conexao();
         cx.conectar();
         List<Participante> participantes = new ArrayList();
@@ -263,8 +263,8 @@ public class TarefasAdminDB {
 
                 participantes.add(new Participante(id, email, nome, senha, PapelUsuario.valueOf(papel)));
             }
-        }catch (Exception err){
-            System.out.println(err.getMessage());
+        }catch (ConexaoBancoException err){
+            throw new ConexaoBancoException ("Erro ao listar participantes! "+err.getMessage());
         }finally {
             cx.fechar();
         }
